@@ -15,23 +15,16 @@
         version = "dev";
         src = ./.;
 
-        sbcl-runtime = pkgs.sbcl.withPackages (ps: [
-          # Write your dependencies
-          #ps.woo
-        ]);
-
-        sbcl-project = sbcl-runtime.buildASDFSystem rec {
+        sbcl-project = pkgs.sbcl.buildASDFSystem rec {
           inherit pname version src;
         };
-
-        sbcl-output = sbcl-runtime.withPackages (ps: [ sbcl-project ]);
       in
       {
         formatter = treefmtEval.config.build.wrapper;
 
         packages = {
-          inherit sbcl-output;
-          default = sbcl-output;
+          inherit sbcl-project;
+          default = sbcl-project;
         };
 
         checks = {
